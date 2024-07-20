@@ -27,6 +27,9 @@ export const colorTokens = {
 		800: "#00353F",
 		900: "#001519",
 	},
+	error: {
+		50: "#D63230",
+	}
 };
 
 // mui theme settings
@@ -72,6 +75,9 @@ export const themeSettings = (mode) => {
 							default: colorTokens.grey[10],
 							alt: colorTokens.grey[0],
 						},
+						error: {
+							main: colorTokens.error[50],
+						}
 				  }),
 		},
 		typography: {

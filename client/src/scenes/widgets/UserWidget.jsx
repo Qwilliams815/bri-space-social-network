@@ -11,8 +11,12 @@ import WidgetWrapper from "@/components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { positions } from "@mui/system";
+import { width } from "@mui/system";
+import { useMediaQuery } from "@mui/material";
+import AddRemoveFriendButton from "@/components/AddRemoveFriendButton";
 
-const UserWidget = ({ userId, picturePath }) => {
+const UserWidget = ({ userId, picturePath, isLoggedInUser, isHomePage }) => {
 	const [user, setUser] = useState(null);
 	const { palette } = useTheme();
 	const navigate = useNavigate();
@@ -20,6 +24,7 @@ const UserWidget = ({ userId, picturePath }) => {
 	const dark = palette.neutral.dark;
 	const medium = palette.neutral.medium;
 	const main = palette.neutral.main;
+	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
 	const getUser = async () => {
 		const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -71,7 +76,11 @@ const UserWidget = ({ userId, picturePath }) => {
 						<Typography color={medium}>{friends.length} friends</Typography>
 					</Box>
 				</FlexBetween>
-				<ManageAccountsOutlined />
+				{isHomePage || isLoggedInUser ? (
+					<ManageAccountsOutlined />
+				) : (
+					<AddRemoveFriendButton friendId={userId} />
+				)}
 			</FlexBetween>
 
 			<Divider />
@@ -92,13 +101,13 @@ const UserWidget = ({ userId, picturePath }) => {
 			{/* THIRD ROW: viewed profile, impressions */}
 			<Box p="1rem 0">
 				<FlexBetween mb="0.5rem">
-					<Typography color={medium}>Who's viewed your profile</Typography>
+					<Typography color={medium}>Profile views</Typography>
 					<Typography color={main} fontWeight="500">
 						{viewedProfile}
 					</Typography>
 				</FlexBetween>
 				<FlexBetween>
-					<Typography color={medium}>post impressions</Typography>
+					<Typography color={medium}>Post impressions</Typography>
 					<Typography color={main} fontWeight="500">
 						{impressions}
 					</Typography>
@@ -121,7 +130,7 @@ const UserWidget = ({ userId, picturePath }) => {
 							<Typography color={medium}>Social Network</Typography>
 						</Box>
 					</FlexBetween>
-					<EditOutlined sx={{ color: main }} />
+					{isLoggedInUser ? <EditOutlined sx={{ color: main }} /> : null}
 				</FlexBetween>
 
 				<FlexBetween gap="1rem">
@@ -134,7 +143,7 @@ const UserWidget = ({ userId, picturePath }) => {
 							<Typography color={medium}>Network Platform</Typography>
 						</Box>
 					</FlexBetween>
-					<EditOutlined sx={{ color: main }} />
+					{isLoggedInUser ? <EditOutlined sx={{ color: main }} /> : null}
 				</FlexBetween>
 			</Box>
 		</WidgetWrapper>

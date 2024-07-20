@@ -1,15 +1,24 @@
 import { Typography, useTheme } from "@mui/material";
 import FlexBetween from "@/components/FlexBetween";
 import WidgetWrapper from "@/components/WidgetWrapper";
+import { useMediaQuery } from "@mui/material";
 
 const AdvertWidget = () => {
 	const { palette } = useTheme();
 	const dark = palette.neutral.dark;
 	const main = palette.neutral.main;
 	const medium = palette.neutral.medium;
+	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
 	return (
-		<WidgetWrapper>
+		<WidgetWrapper
+		// sx={isNonMobileScreens ? { position: "fixed", width: "23%" } : null}
+		// sx={
+		// 	isNonMobileScreens
+		// 		? { position: "sticky", top: "110px", border: "solid 1px red" }
+		// 		: null
+		// }
+		>
 			<FlexBetween>
 				<Typography color={dark} variant="h5" fontWeight="500">
 					Sponsored

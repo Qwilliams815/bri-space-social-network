@@ -5,8 +5,6 @@ import "./index.css";
 import authReducer from "./state";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-// import { setupListeners } from "@reduxjs/toolkit/query";
-// import { api } from "./state/api";
 // Redux persist allows for local state storage
 import {
 	persistStore,
@@ -28,28 +26,14 @@ const persistConfig = {
 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
 
-// const store = configureStore({
-// 	reducer: {
-// 		reducer: persistedReducer,
-// 		middleware: (getDefaultMiddleware) =>
-// 			getDefaultMiddleware({
-// 				serializableCheck: {
-// 					// Bypass some warnings that come up when using redux-persist
-// 					ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-// 				},
-// 			}).concat(api.middleware),
-//     },
-// 	}),
-// });
-
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+	reducer: persistedReducer,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+			},
+		}),
 });
 
 // setupListeners(store.dispatch);

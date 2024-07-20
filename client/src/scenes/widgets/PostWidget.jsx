@@ -4,13 +4,32 @@ import {
 	FavoriteOutlined,
 	ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+// import {
+// 	Box,
+// 	Divider,
+// 	Typography,
+// 	InputBase,
+// 	useTheme,
+// 	Button,
+// 	IconButton,
+// 	useMediaQuery,
+// } from "@mui/material";
+import {
+	Box,
+	Divider,
+	IconButton,
+	Typography,
+	useTheme,
+	InputBase,
+} from "@mui/material";
 import FlexBetween from "@/components/FlexBetween";
 import Friend from "@/components/Friend";
 import WidgetWrapper from "@/components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "@/state";
+import UserImage from "@/components/UserImage";
+import { sizeHeight } from "@mui/system";
 
 const PostWidget = ({
 	postId,
@@ -22,11 +41,15 @@ const PostWidget = ({
 	userPicturePath,
 	likes,
 	comments,
+	userImage,
+	isLoggedInUser,
+	isHomePage,
 }) => {
 	const [isComments, setIsComments] = useState(false);
 	const dispatch = useDispatch();
 	const token = useSelector((state) => state.token);
 	const loggedInUserId = useSelector((state) => state.user._id);
+	const loggedInPicturePath = useSelector((state) => state.user.picturePath);
 	const isLiked = Boolean(likes[loggedInUserId]);
 	const likeCount = Object.keys(likes).length;
 
@@ -48,12 +71,14 @@ const PostWidget = ({
 	};
 
 	return (
-		<WidgetWrapper m="2rem 0">
+		<WidgetWrapper mb="2rem">
 			<Friend
 				friendId={postUserId}
 				name={name}
 				subtitle={location}
 				userPicturePath={userPicturePath}
+				isLoggedInUser={isLoggedInUser}
+				isHomePage={isHomePage}
 			/>
 			<Typography color={main} sx={{ mt: "1rem" }}>
 				{description}
@@ -103,6 +128,21 @@ const PostWidget = ({
 						</Box>
 					))}
 					<Divider />
+
+					<FlexBetween gap="0.5rem" mt="0.5rem">
+						<UserImage image={loggedInPicturePath} size="40px" />
+						<InputBase
+							placeholder="Post your reply..."
+							// onChange={(e) => setPost(e.target.value)}
+							// value={post}
+							sx={{
+								width: "100%",
+								backgroundColor: palette.neutral.light,
+								borderRadius: "2rem",
+								padding: "0.5rem 2rem",
+							}}
+						/>
+					</FlexBetween>
 				</Box>
 			)}
 		</WidgetWrapper>

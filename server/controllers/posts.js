@@ -58,29 +58,29 @@ export const getUserPosts = async (req, res) => {
 // Update Post
 export const likePost = async (req, res) => {
 	try {
-    // Get generated post id from url query
+		// Get generated post id from url query
 		const { id } = req.params;
-    // Get current user id from req.body
+		// Get current user id from req.body
 		const { userId } = req.body;
-    // Get relavant post
+		// Get relavant post
 		const post = await Post.findById(id);
 
-    // Check if user already liked post
+		// Check if user already liked post
 		const isLiked = post.likes.get(userId);
 		if (isLiked) {
-      // If user already liked post, remove like
+			// If user already liked post, remove like
 			post.likes.delete(userId);
 		} else {
-      // If user has not liked post, add like
+			// If user has not liked post, add like
 			post.likes.set(userId, true);
 		}
 
-    // Get newly updated post to send to the frontend
+		// Get newly updated post to send to the frontend
 		const updatedPost = await Post.findByIdAndUpdate(
 			id,
-      // [update] «Object»
+			// [update] «Object»
 			{ likes: post.likes },
-      // [options.new=false] «Boolean» if true, return the modified document rather than the original
+			// [options.new=false] «Boolean» if true, return the modified document rather than the original
 			{ new: true }
 		);
 

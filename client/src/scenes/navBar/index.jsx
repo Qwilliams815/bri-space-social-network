@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Box,
 	IconButton,
@@ -8,6 +8,7 @@ import {
 	Select,
 	MenuItem,
 	FormControl,
+	Autocomplete,
 	useTheme,
 	useMediaQuery,
 } from "@mui/material";
@@ -25,14 +26,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "@/state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "@/components/FlexBetween";
+import SearchInput from "@/components/SearchInput";
 import { Light } from "@mui/icons-material";
+import { palette } from "@mui/system";
+import { width } from "@mui/system";
+import Logo from "@/components/Logo";
 
 export default function NavBar() {
 	const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.user);
+	const [users, setUsers] = useState([]);
 	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)"); // Material UI media query hook
+	const token = useSelector((state) => state.token);
 
 	const theme = useTheme();
 	const neutralLight = theme.palette.neutral.light;
@@ -41,39 +48,71 @@ export default function NavBar() {
 	const primaryLight = theme.palette.primary.light;
 	const alt = theme.palette.background.alt;
 
-	const fullName = `${user.firstName} ${user.lastName}`;
+	// const fullName = `${user.firstName} ${user.lastName}` || "Sign in";
+	const fullName = user ? `${user.firstName} ${user.lastName}` : "Sign in";
+
+	const getUsers = async () => {
+		const response = await fetch(`http://localhost:3001/users`, {
+			method: "GET",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const data = await response.json();
+		setUsers(data);
+	};
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
 	// const fullName = "Brian Williams";
 	return (
-		<FlexBetween padding="1rem 6%" backgroundColor={alt}>
+		<FlexBetween
+			padding="1rem 6%"
+			backgroundColor={alt}
+			sx={{ position: "sticky", width: "100%", top: 0, zIndex: 1 }}
+		>
 			{/* Nav Left Side (Logo + Search Bar) */}
-			<FlexBetween gap="1.75rem">
+			<Box
+				gap="1.75rem"
+				sx={{
+					display: "flex",
+					cursor: "pointer",
+					width: "55%",
+				}}
+			>
 				{/* Logo */}
-				<Typography
-					fontWeight={"bold"}
-					fontSize="clamp(1rem, 2rem, 2.25rem)"
-					color="primary"
+				<Box
+					// sx={{ minWidth: "200px" }}
+					sx={{
+						"&:hover": { color: primaryLight, cursor: "pointer" },
+						minWidth: "200px",
+					}}
 					onClick={() => navigate("/home")}
-					// sx is a style object from Material UI used for writing inline styles
-					sx={{ "&:hover": { color: primaryLight, cursor: "pointer" } }}
 				>
-					BriSpace
-				</Typography>
+					<Typography
+						fontWeight={"bold"}
+						fontSize="clamp(1rem, 2rem, 2.25rem)"
+						color="primary"
+
+						// sx is a style object from Material UI used for writing inline styles
+					>
+						<Logo theme={theme} />
+						BriSpace
+					</Typography>
+				</Box>
 
 				{/* Desktop Search Bar*/}
 				{isNonMobileScreens && (
-					<FlexBetween
-						backgroundColor={neutralLight}
-						borderRadius="9px"
-						gap="3rem"
-						padding="0.1rem 1.5rem"
+					<Box
+						// backgroundColor={neutralLight}
+						padding="0.1rem "
+						width="100%"
+						maxWidth={"350px"}
 					>
-						<InputBase placeholder="Search..." />
-						<IconButton>
-							<Search />
-						</IconButton>
-					</FlexBetween>
+						<SearchInput users={users} />
+					</Box>
 				)}
-			</FlexBetween>
+			</Box>
 
 			{/* Nav Right Side (Buttons + User) DESKTOP NAV */}
 			{isNonMobileScreens ? (

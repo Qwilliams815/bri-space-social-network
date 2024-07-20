@@ -6,6 +6,7 @@ import {
 	TextField,
 	useMediaQuery,
 	Typography,
+	CircularProgress,
 	useTheme,
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -53,6 +54,8 @@ const initialValuesLogin = {
 // Form Component
 export default function Form() {
 	const [pageType, setPageType] = useState("login"); // Used to display either Login or register form
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 	const { palette } = useTheme();
 	const dispatch = useDispatch(); // React redux
 	const navigate = useNavigate(); // Navigate to other pages
@@ -85,25 +88,32 @@ export default function Form() {
 
 	// Login
 	const login = async (values, onSubmitProps) => {
-		const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(values),
-		});
+		setLoading(true);
+		try {
+			const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(values),
+			});
 
-		const loggedIn = await loggedInResponse.json();
-		onSubmitProps.resetForm();
-		if (loggedIn) {
-			dispatch(
-				// Set login state with Redux
-				setLogin({
-					user: loggedIn.user,
-					token: loggedIn.token,
-				})
-			);
-			navigate("/home");
-		} else {
-			alert("Invalid credentials");
+			const loggedIn = await loggedInResponse.json();
+			onSubmitProps.resetForm();
+			if (loggedIn) {
+				dispatch(
+					// Set login state with Redux
+					setLogin({
+						user: loggedIn.user,
+						token: loggedIn.token,
+					})
+				);
+				navigate("/home");
+			} else {
+				alert("Invalid credentials");
+			}
+		} catch (error) {
+			setError(true);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -238,22 +248,28 @@ export default function Form() {
 
 					{/* Buttons */}
 					<Box>
+						{error && (
+							<Typography sx={{ color: palette.error.main, mt: "1rem" }} variant="subtitle2">
+								Error connecting to server. Please try again later.
+							</Typography>
+						)}
 						<Button
 							fullWidth
 							type="submit"
 							sx={{
 								m: "2rem 0",
 								p: "1rem",
-								backgroundColor: palette.primary.main,
+								backgroundColor: loading ? palette.background.alt : palette.primary.main,
 								color: palette.background.alt,
 								"&:hover": { color: palette.primary.main },
 							}}
 						>
-							{isLogin ? "LOGIN" : "REGISTER"}
+							{loading ? <CircularProgress /> : isLogin ? "LOGIN" : "REGISTER"}
 						</Button>
 						<Typography
 							onClick={() => {
 								setPageType(isLogin ? "register" : "login");
+								setError(false);
 								resetForm();
 							}}
 							sx={{
