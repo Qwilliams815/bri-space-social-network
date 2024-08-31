@@ -29,15 +29,16 @@ const AdvertWidget = () => {
 				width="100%"
 				height="auto"
 				alt="advert"
-				src="http://localhost:3001/assets/info4.jpeg"
+				src="http://localhost:3001/assets/advert.jpeg"
 				style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
 			/>
 			<FlexBetween>
-				<Typography color={main}>MikaCosmetics</Typography>
+				<Typography color={main}>Beauty by Brian</Typography>
 			</FlexBetween>
-			<Typography color={medium}>mikacosmetics.com</Typography>
+			<Typography color={medium}>beautybybrian.com</Typography>
 			<Typography color={medium} m="0.5rem 0">
-				Your pathway to stunning and immaculate beauty and well-being.
+				Your pathway to immaculate beauty and well-being. <br></br> Bri-ten your skin
+				today!
 			</Typography>
 		</WidgetWrapper>
 	);

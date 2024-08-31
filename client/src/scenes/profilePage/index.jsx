@@ -16,6 +16,7 @@ const ProfilePage = () => {
 	const token = useSelector((state) => state.token);
 	const { _id, picturePath } = useSelector((state) => state.user);
 	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+	// let isLoggedInUser;
 
 	const getUser = async () => {
 		const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -23,12 +24,11 @@ const ProfilePage = () => {
 			headers: { Authorization: `Bearer ${token}` },
 		});
 		const data = await response.json();
-		// console.log(editable);
-
-		// console.log(editable);
-		// console.log(_id);
-		// console.log(data._id);
+		// console.log("getUser() fired, from profilePage");
 		setIsLoggedInUser(data._id === _id);
+		// isLoggedInUser = data._id === _id;
+		// console.log(isLoggedInUser);
+		console.log(user.bannerPath);
 		setUser(data);
 	};
 
@@ -47,9 +47,11 @@ const ProfilePage = () => {
 				m={"0 auto"}
 				mt={"2rem"}
 				borderRadius="0.75rem"
-				sx={{
-					backgroundImage: `url("https://hips.hearstapps.com/hmg-prod/images/ripe-yellow-bananas-at-the-shopping-market-fruits-royalty-free-image-1712833209.jpg")}`,
-				}}
+				sx={
+					{
+						// backgroundImage: `url(http://localhost:3001/assets/${user.bannerPath})`,
+					}
+				}
 				style={{ backgroundPosition: "center", backgroundSize: "cover" }}
 				// backgroundimage={user.picturePath}
 			/>
@@ -67,9 +69,9 @@ const ProfilePage = () => {
 							userId={userId}
 							picturePath={user.picturePath}
 							isLoggedInUser={isLoggedInUser}
+							isProfile
 						/>
 						<Box m="2rem 0" />
-						{/* THROWS ERROR WHYYYY */}
 						<FriendListWidget userId={userId} isLoggedInUser={isLoggedInUser} />
 					</Box>
 				</Box>
@@ -77,9 +79,9 @@ const ProfilePage = () => {
 					flexBasis={isNonMobileScreens ? "42%" : undefined}
 					mt={isNonMobileScreens ? undefined : "2rem"}
 				>
+					{/* Only shows MyPostWidget if currently navigated to logged in user's profile */}
 					{isLoggedInUser && <MyPostWidget picturePath={user.picturePath} />}
-					{/* THROWS ERROR WHYYYY */}
-					<PostsWidget userId={userId} isProfile isLoggedInUser={isLoggedInUser} />
+					<PostsWidget userId={userId} isProfile />
 				</Box>
 			</Box>
 		</Box>

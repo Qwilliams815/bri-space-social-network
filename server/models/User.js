@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema(
 			type: String,
 			default: "",
 		},
+		bannerPath: {
+			type: String,
+			default: "",
+		},
 		friends: {
 			type: Array,
 			default: [],

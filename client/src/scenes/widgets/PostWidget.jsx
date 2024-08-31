@@ -42,7 +42,7 @@ const PostWidget = ({
 	likes,
 	comments,
 	userImage,
-	isLoggedInUser,
+	isProfile,
 	isHomePage,
 }) => {
 	const [isComments, setIsComments] = useState(false);
@@ -52,6 +52,7 @@ const PostWidget = ({
 	const loggedInPicturePath = useSelector((state) => state.user.picturePath);
 	const isLiked = Boolean(likes[loggedInUserId]);
 	const likeCount = Object.keys(likes).length;
+	// console.log(isLoggedInUser);
 
 	const { palette } = useTheme();
 	const main = palette.neutral.main;
@@ -77,8 +78,9 @@ const PostWidget = ({
 				name={name}
 				subtitle={location}
 				userPicturePath={userPicturePath}
-				isLoggedInUser={isLoggedInUser}
+				isProfilePostWidget
 				isHomePage={isHomePage}
+				isProfile={isProfile}
 			/>
 			<Typography color={main} sx={{ mt: "1rem" }}>
 				{description}

@@ -8,15 +8,18 @@ import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "@/components/UserImage";
 import FlexBetween from "@/components/FlexBetween";
 import WidgetWrapper from "@/components/WidgetWrapper";
+import AddRemoveFriendButton from "@/components/AddRemoveFriendButton";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { positions } from "@mui/system";
-import { width } from "@mui/system";
-import { useMediaQuery } from "@mui/material";
-import AddRemoveFriendButton from "@/components/AddRemoveFriendButton";
 
-const UserWidget = ({ userId, picturePath, isLoggedInUser, isHomePage }) => {
+const UserWidget = ({
+	userId,
+	picturePath,
+	isLoggedInUser,
+	isHomePage,
+	isProfile,
+}) => {
 	const [user, setUser] = useState(null);
 	const { palette } = useTheme();
 	const navigate = useNavigate();
@@ -24,7 +27,6 @@ const UserWidget = ({ userId, picturePath, isLoggedInUser, isHomePage }) => {
 	const dark = palette.neutral.dark;
 	const medium = palette.neutral.medium;
 	const main = palette.neutral.main;
-	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
 	const getUser = async () => {
 		const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -34,6 +36,7 @@ const UserWidget = ({ userId, picturePath, isLoggedInUser, isHomePage }) => {
 		const data = await response.json();
 		setUser(data);
 	};
+	// console.log(isProfile);
 
 	useEffect(() => {
 		getUser();
@@ -76,10 +79,11 @@ const UserWidget = ({ userId, picturePath, isLoggedInUser, isHomePage }) => {
 						<Typography color={medium}>{friends.length} friends</Typography>
 					</Box>
 				</FlexBetween>
+				{/* If current user is on the homepage or my profile page, show an edit button instead of add/remove friend button */}
 				{isHomePage || isLoggedInUser ? (
 					<ManageAccountsOutlined />
 				) : (
-					<AddRemoveFriendButton friendId={userId} />
+					<AddRemoveFriendButton friendId={userId} isProfile={isProfile} />
 				)}
 			</FlexBetween>
 

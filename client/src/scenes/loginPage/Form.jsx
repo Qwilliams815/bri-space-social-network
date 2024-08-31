@@ -97,6 +97,10 @@ export default function Form() {
 			});
 
 			const loggedIn = await loggedInResponse.json();
+			console.log(loggedIn.msg);
+			if (loggedIn) {
+				console.log("true");
+			}
 			onSubmitProps.resetForm();
 			if (loggedIn) {
 				dispatch(
@@ -111,6 +115,7 @@ export default function Form() {
 				alert("Invalid credentials");
 			}
 		} catch (error) {
+			console.log("NEW ERROR", error);
 			setError(true);
 		} finally {
 			setLoading(false);

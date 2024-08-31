@@ -44,6 +44,7 @@ export const register = async (req, res) => {
 
 // Authentication - Login User
 export const login = async (req, res) => {
+	console.log("Hello!", req.body);
 	try {
 		// Unpack req.body
 		const { email, password } = req.body;
@@ -62,6 +63,7 @@ export const login = async (req, res) => {
 
 		res.status(200).json({ token, user });
 	} catch (error) {
+		console.log("hello!", error);
 		res.status(500).json({ error: error.message });
 	}
 };

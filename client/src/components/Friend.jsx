@@ -1,8 +1,6 @@
-import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFriends } from "@/state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
 import AddRemoveFriendButton from "./AddRemoveFriendButton";
@@ -14,24 +12,18 @@ const Friend = ({
 	userPicturePath,
 	isLoggedInUser,
 	isHomePage,
+	isProfile,
+	isProfilePostWidget,
 }) => {
 	const navigate = useNavigate();
+	const { _id } = useSelector((state) => state.user);
+	const isMe = _id === friendId; // Used for eliminating the add/remove friend button from my listing in other people's friendlistWidget
 
 	const { palette } = useTheme();
 	const main = palette.neutral.main;
 	const medium = palette.neutral.medium;
 
-	// Used to toggle add/remove friend button icon
-	// dispatch(setFriends([]));
-
-	// for (let friend of friends) {
-	// 	console.log(friend);
-	// 	const isFriend = friend._id === friendId;
-	// }
-
-	// const isFriend = Array.isArray(friends)
-	// 	? friends.find((friend) => friend._id === friendId)
-	// 	: undefined;
+	// sx={{ border: `1px solid red` }}
 
 	return (
 		<FlexBetween>
@@ -56,9 +48,15 @@ const Friend = ({
 					</Typography>
 				</Box>
 			</FlexBetween>
-
-			{(isLoggedInUser || isHomePage) && (
-				<AddRemoveFriendButton friendId={friendId} />
+			{/* Cases:
+			1. if on homepage and !me - does not show the add/remove friend button next to my name on my posts.
+			2.  isLoggedInUser (coming from friendsListWidget) && !isMe - does not show the add/remove friend button next to my name on my posts.
+			IsLoggedInUser is checking to see if its my Profile page, isMe is just checking if the actual freindId is mine or not.
+			If its my profile page or its the homepage and the friendId is not me, show the add/remove friend button
+			*/}
+			{/* {(isProfile || isHomePage) && !isMe && ( */}
+			{(isLoggedInUser || isHomePage || isProfilePostWidget) && !isMe && (
+				<AddRemoveFriendButton friendId={friendId} isProfile={isProfile} />
 			)}
 		</FlexBetween>
 	);

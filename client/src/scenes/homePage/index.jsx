@@ -12,12 +12,6 @@ import FriendListWidget from "@/scenes/widgets/FriendListWidget";
 export default function HomePage() {
 	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 	const { _id, picturePath } = useSelector((state) => state.user);
-	const [isHomePage, setIsHomePage] = useState(null);
-
-	useEffect(() => {
-		setIsHomePage(true);
-		return () => setIsHomePage(false);
-	}, []);
 
 	return (
 		<Box>
@@ -31,7 +25,7 @@ export default function HomePage() {
 			>
 				<Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
 					<Box sx={{ position: "sticky", top: "120px" }}>
-						<UserWidget userId={_id} picturePath={picturePath} isHomePage={isHomePage} />
+						<UserWidget userId={_id} picturePath={picturePath} isHomePage />
 					</Box>
 				</Box>
 
@@ -40,7 +34,7 @@ export default function HomePage() {
 					mt={isNonMobileScreens ? undefined : "2rem"}
 				>
 					<MyPostWidget picturePath={picturePath} />
-					<PostsWidget userId={_id} userImage={picturePath} isHomePage={isHomePage} />
+					<PostsWidget userId={_id} userImage={picturePath} isHomePage />
 				</Box>
 
 				{isNonMobileScreens && (
@@ -48,7 +42,7 @@ export default function HomePage() {
 						<Box sx={{ position: "sticky", top: "120px" }}>
 							<AdvertWidget />
 							<Box m="2rem 0" />
-							<FriendListWidget userId={_id} isHomePage={isHomePage} />
+							<FriendListWidget userId={_id} isHomePage />
 						</Box>
 					</Box>
 				)}

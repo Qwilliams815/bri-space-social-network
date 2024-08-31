@@ -6,13 +6,13 @@ import PostWidget from "./PostWidget";
 const PostsWidget = ({
 	userId,
 	userImage,
-	isProfile = false,
-	isLoggedInUser,
+	isProfile,
 	isHomePage,
 }) => {
 	const dispatch = useDispatch();
 	const posts = useSelector((state) => state.posts);
 	const token = useSelector((state) => state.token);
+	// console.log(isProfile);
 
 	const getPosts = async () => {
 		const response = await fetch(`http://localhost:3001/posts`, {
@@ -36,6 +36,7 @@ const PostsWidget = ({
 		if (isProfile) {
 			// getUserPosts();
 			getUserPosts();
+			// console.log(isLoggedInUser);
 		} else {
 			getPosts();
 		}
@@ -68,8 +69,9 @@ const PostsWidget = ({
 						likes={likes}
 						comments={comments}
 						userImage={userImage}
-						isLoggedInUser={isLoggedInUser}
+						// isLoggedInUser
 						isHomePage={isHomePage}
+						isProfile={isProfile}
 					></PostWidget>
 				)
 			)}

@@ -58,6 +58,7 @@ export default function NavBar() {
 		});
 		const data = await response.json();
 		setUsers(data);
+		users.forEach((user) => console.log(user.firstName, user.friends));
 	};
 
 	useEffect(() => {

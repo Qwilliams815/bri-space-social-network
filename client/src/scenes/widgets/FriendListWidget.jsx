@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFriends } from "@/state";
 
 const FriendListWidget = ({ userId, isLoggedInUser, isHomePage }) => {
+	// userId is always my ID
 	const dispatch = useDispatch();
 	const { palette } = useTheme();
 	const token = useSelector((state) => state.token);
@@ -23,8 +24,6 @@ const FriendListWidget = ({ userId, isLoggedInUser, isHomePage }) => {
 	useEffect(() => {
 		getFriends();
 	}, []);
-
-	// console.log(userId);
 
 	return (
 		<WidgetWrapper>
